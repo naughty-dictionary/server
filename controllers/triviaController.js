@@ -2,14 +2,15 @@ const axios = require('axios')
 class TriviaController{
     static get(req, res, next){
         axios({
-            method: 'GET',
-            url: 'https://opentdb.com/api.php?amount=1&difficulty=hard&type=boolean'
+            url: 'https://opentdb.com/api.php?amount=1&type=boolean',
+            method: "GET"
         })
-        .then(value => {
-            res.status(200).json(value)
+        .then((response)=>{
+            res.status(201).json(response.data);
         })
-        .catch(error => {
-            next(error)
+        .catch((err) =>{
+            console.log(err);
+            next(err);
         })
     }
 }

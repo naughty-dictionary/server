@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
-const secret = process.env.secretJWT
+
 class Jwt{
    static verify(token){
-      const result = jwt.verify(token, secret)
+      const result = jwt.verify(token, process.env.SECRETJWT)
       return result
    }
    static sign(obj){
-      const result = jwt.sign(obj, secret)
+      const result = jwt.sign(obj, process.env.SECRETJWT)
       return result
    }
 }
