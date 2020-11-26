@@ -2,14 +2,15 @@ const axios = require('axios')
 class BoredController{
     static get(req, res, next){
         axios({
-            method: 'GET',
-            url: 'http://www.boredapi.com/api/activity'
+            url: 'http://www.boredapi.com/api/activity',
+            method: "GET"
         })
-        .then(value => {
-            res.status(200).json(value)
+        .then((response)=>{
+            res.status(201).json({data: response.data});
         })
-        .catch(error => {
-            next(error)
+        .catch((err) =>{
+            console.log(err);
+            next(err);
         })
     }
 }

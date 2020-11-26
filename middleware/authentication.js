@@ -1,22 +1,30 @@
 require('dotenv').config()
 const Jwt = require('../helper/jwt')
-module.exports = async (req, res, next) => {
-    const token = req.headers.access_token
-    if (token) {
-        res.status(400).json(`you must login first`)
-    }else{
-        try {
-            const decoded = await Jwt.verify(token)
-            if (decoded) {
-                req.loginuser = decoded
-            }else{
-                throw {
-                    status: 401,
-                    message: `your session is time up`
-                }
+const {User} = require('../models');
+
+module.exports = async (req, res, next) =>{
+    try {
+        const access_token = req.headers.access_token;
+        console.log(access_token);
+        if(!access_token){
+            res.status(401).json({
+                message: 'You need to login to have an access'
+            })
+        } else {
+            const decode = Jwt.verify(access_token);
+            req.loggedIn = decode;
+            const foundUser = await User.findOne({where: {id: decode.id}})
+            if(foundUser){
+                next()
+            } else {
+                res.status(401).json({
+                    message: 'You need to login to have an access'
+                })
             }
-        } catch (error) {
-            next(error)
         }
+    } catch {
+        res.status(401).json({
+            message: 'Jangan nakal kamu'
+        })
     }
-}
+} 
