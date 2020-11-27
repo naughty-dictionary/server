@@ -5,7 +5,7 @@ const {User} = require('../models');
 module.exports = async (req, res, next) =>{
     try {
         const access_token = req.headers.access_token;
-        console.log(access_token);
+        console.log(access_token + "<< access token");
         if(!access_token){
             res.status(401).json({
                 message: 'You need to login to have an access'
