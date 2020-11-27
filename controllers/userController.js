@@ -44,30 +44,29 @@ class Controller {
         }
     }
 
-    // static async googleLogin(req, res, next){
-    //     try { 
-    //         const ticket = await client.verifyIdToken({
-    //         idToken: req.body.googleToken,
-    //         audience: process.env.GOOGLECLIENT_ID,
-    //         });
-    //         const payload = ticket.getPayload();
-
-    //         const loginAccount = await User.findOne({where: {email: payload.email}});
-    //         if(loginAccount){
-    //             const access_token = jwt.sign({id: loginAccount.id, email: loginAccount.email})
-    //             res.status(200).json({access_token});
-    //         } else {
-    //             const newAccount = await User.create({
-    //                 email: payload.email,
-    //                 password: process.env.NEWACCPASS
-    //             })
-    //             const access_token = jwt.sign({id: newAccount.id, email: newAccount.email})
-    //             res.status(200).json({access_token});
-    //         }
-    //     } catch(error){
-    //         next(error);
-    //     }
-    // }
+    static async googleLogin(req, res, next){
+        try { 
+            const ticket = await client.verifyIdToken({
+            idToken: req.body.googleToken,
+            audience: process.env.GOOGLECLIENT_ID,
+            });
+            const payload = ticket.getPayload();
+            const loginAccount = await User.findOne({where: {email: payload.email}});
+            if(loginAccount){
+                const access_token = jwt.sign({id: loginAccount.id, email: loginAccount.email})
+                res.status(200).json({access_token});
+            } else {
+                const newAccount = await User.create({
+                    email: payload.email,
+                    password: process.env.NEWACCPASS
+                })
+                const access_token = jwt.sign({id: newAccount.id, email: newAccount.email})
+                res.status(200).json({access_token});
+            }
+        } catch(error){
+            next(error);
+        }
+    }
 }
 
 module.exports = Controller
