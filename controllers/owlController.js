@@ -8,7 +8,7 @@ class owlController{
             url: 'https://owlbot.info/api/v4/dictionary/' + word,
             method: 'GET',
             headers: {
-              Authorization : "Token 71be7839d9f1c1c0384dee6bf442d998054d9a23"
+              Authorization : process.env.OWL_TOKEN
             }
         })
         .then(value => {
